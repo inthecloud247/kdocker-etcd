@@ -8,6 +8,7 @@ ADD setupfiles/ /setupfiles/
 
 RUN \
   `# Install etcd (using cache if possible)`; \
+  mkdir -vp /setupfiles/cache; \
   cd /setupfiles/cache; \
   wget -p -c --no-check-certificate https://github.com/coreos/etcd/releases/download/v0.2.0-rc3/etcd-v0.2.0-rc3-Linux-x86_64.tar.gz; \
   mkdir -vp /opt/etcd/; \
