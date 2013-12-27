@@ -1,28 +1,40 @@
 FROM inthecloud247/kdocker-base
 MAINTAINER inthecloud247 "inthecloud247@gmail.com"
 
-ENV LAST_UPDATED 2013-12-22
+ENV LAST_UPDATED 2013-12-26
 
 # copy required conf files and folders
-ADD setupfiles/ /setupfiles/
+# ADD setupfiles/ /setupfiles/
 
+# standard directory setup
 RUN \
-  `# Install etcd (using cache if possible)`; \
-  mkdir -vp /setupfiles/cache; \
-  cd /setupfiles/cache; \
-  wget -p -c --no-check-certificate https://github.com/coreos/etcd/releases/download/v0.2.0-rc3/etcd-v0.2.0-rc3-Linux-x86_64.tar.gz; \
+  `# Create cache directory`; \
+  DIR_CACHE="/setupfiles/cache/"; \
+  mkdir -vp $DIR_CACHE; \
+  cd $DIR_CACHE;
+
+# put custom commands here
+RUN \
+  `# Install etcd`; \
   mkdir -vp /opt/etcd/; \
-  tar --strip-components=1 -xvf /setupfiles/cache/github.com/coreos/etcd/releases/download/v0.2.0-rc3/etcd-v0.2.0-rc3-Linux-x86_64.tar.gz -C /opt/etcd/; \
+  DL_PROTO="https://"
+  DL_FILE="github.com/coreos/etcd/releases/download/v0.2.0-rc3/etcd-v0.2.0-rc3-Linux-x86_64.tar.gz"
+  wget -p -c --no-check-certificate $DL_PROTO$DL_FILE ; \
+  tar --strip-components=1 -xvf /setupfiles/cache/$DL_FILE -C /opt/etcd/; \
   ln -s /opt/etcd/etcd /usr/sbin/etcd; \
   ln -s /opt/etcd/etcdctl /usr/sbin/etcdctl;
 
+# cleanup
+RUN \
+  `# CLEANUP`; \
+  rm -vrf /setupfiles;
 
 CMD ["etcd"]
 
 # client port
-#EXPOSE 4001
+EXPOSE 4001
 # cluster communication port
-#EXPOSE 7001
+EXPOSE 7001
 
 ## [etcd] example for launching on a 3-machine prod cluster:
 # Note: set the /etc/hosts file to contain the addresses of:
