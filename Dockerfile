@@ -1,10 +1,7 @@
 FROM inthecloud247/kdocker-base
 MAINTAINER inthecloud247 "inthecloud247@gmail.com"
 
-ENV LAST_UPDATED 2013-12-26
-
-# copy required conf files and folders
-# ADD setupfiles/ /setupfiles/
+ENV LAST_UPDATED 2013-12-27
 
 # standard directory setup
 RUN \
@@ -29,6 +26,19 @@ RUN \
   `# CLEANUP`; \
   rm -vrf /setupfiles;
 
+# copy required conf files and folders
+ADD setupfiles/confs /setupfiles/confs
+RUN \
+  cp -vr /setupfiles/confs/etc /;
+
+# ADD \
+#   setupfiles/scripts/run.sh /usr/local/bin/run
+
+# RUN \
+#   chmod +x /usr/local/bin/run
+#CMD ["/usr/local/bin/run"]
+
+# can set environmental vars
 CMD ["etcd"]
 
 # client port

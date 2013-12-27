@@ -1,0 +1,9 @@
+[ElasticSearchOutput]
+message_matcher = "Type == 'sync.log'"
+cluster = "elasticsearch"
+index = "synclog-%{2006.01.02.15.04.05}"
+type_name = "sync.log.line"
+server = "http://127.0.0.1:9200"
+format = "clean"
+flush_interval = 5000
+flush_count = 10
